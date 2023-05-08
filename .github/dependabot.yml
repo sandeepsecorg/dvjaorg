@@ -7,6 +7,6 @@ version: 2
 updates:
   - package-ecosystem: "Maven" # See documentation for possible values
     directory: "/" # Location of package manifests
-    password: ${{secrets.Test_dependabot_secret}}
+    password: ${{secrets.TEST_DEPENDABOT_SECRET}}
     schedule:
       interval: "daily"
