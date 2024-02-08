@@ -49,9 +49,8 @@ public class UserService {
         if(StringUtils.isEmpty(password))
             return false;
 
- //       return user.getPassword().equals(hashEncodePassword(password));
-        return 1;
-    }
+        return user.getPassword().equals(hashEncodePassword(password));
+   }
 
     public List<User> findAllUsers() {
         Query query = entityManager.createQuery("SELECT u FROM User u");
