@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:23-ea-22-jdk-oraclelinux8
 MAINTAINER Abhisek Datta <abhisek@appsecco.com>
 
 RUN apt-get update
