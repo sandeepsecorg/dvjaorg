@@ -39,7 +39,7 @@ public class HelloWorld extends ExampleSupport {
     /**
      * Field for Message property.
      */
-    private String message;
+    private String message1;
 
     /**
      * Return Message property.
@@ -47,7 +47,7 @@ public class HelloWorld extends ExampleSupport {
      * @return Message property
      */
     public String getMessage() {
-        return message;
+        return message1;
     }
 
     /**
@@ -55,7 +55,7 @@ public class HelloWorld extends ExampleSupport {
      *
      * @param message Text to display on HelloWorld page.
      */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String message1) {
+        this.message1 = message1;
     }
 }
