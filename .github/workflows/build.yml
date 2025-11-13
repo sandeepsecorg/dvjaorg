@@ -53,4 +53,5 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.junit.reportPaths=target/surefire-reports
+            -Dsonar.java.binaries=/home/runner/work/dvja/dvja/target/classes
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
