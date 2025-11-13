@@ -1,27 +1,31 @@
-name: SonarQube
+name: Java Build and SAST Scan with SonarCloud
+
 on:
   push:
-    branches:
-      - master
+    branches: [ "main", "develop" ]
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ "main", "develop" ]
+
 jobs:
-  build:
+  build_and_scan:
     name: Build and Analyze with SonarCloud
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout source code
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed for full analysis history
+          fetch-depth: 0  # Required for SonarCloud to analyze PRs correctly
 
+      # 2️⃣ Set up Java environment
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # 3️⃣ Cache Maven dependencies (optional but recommended)
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
@@ -30,28 +34,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build and test with Maven
+      # 4️⃣ Build and compile the project
+      - name: Build with Maven
         run: mvn clean verify --batch-mode
-      - name: List contents of target directory
-        run: |
-          echo "Current location: $(pwd)"
-          ls -l
-          cd /home/runner/work/dvja/dvja/target/classes
-          echo "Now inside target/classes directory:"
-          ls -l
-          
 
-      # ---------- SonarCloud SAST Scan ----------
+      # 5️⃣ (Optional) Debug directory structure
+      - name: List build output
+        run: |
+          echo "Checking compiled class files..."
+          ls -l target || echo "target directory not found"
+          find target -type f -name "*.class" | head -10
+
+      # 6️⃣ Run SonarCloud static analysis (SAST)
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_ORG: ${{ secrets.SONAR_ORG }}
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
         with:
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.junit.reportPaths=target/surefire-reports
-            -Dsonar.java.binaries=/home/runner/work/dvja/dvja/target/classes
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+            -Dsonar.sources=src/main/java
+            -Dsonar.java.binaries=target/classes
+            -Dsonar.sourceEncoding=UTF-8
