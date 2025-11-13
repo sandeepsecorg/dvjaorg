@@ -36,8 +36,8 @@ jobs:
         run: |
           echo "Current location: $(pwd)"
           ls -l
-          cd /home/runner/work/dvja/dvja/target
-          echo "Now inside target directory:"
+          cd /home/runner/work/dvja/dvja/target/classes
+          echo "Now inside target/classes directory:"
           ls -l
           
 
